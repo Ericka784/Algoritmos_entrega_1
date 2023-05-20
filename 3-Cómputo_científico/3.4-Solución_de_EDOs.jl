@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.19
+# v0.19.22
 
 using Markdown
 using InteractiveUtils
@@ -235,13 +235,35 @@ y devuelva el tamaño de paso $h$ correspondiente.
 """
 
 # ╔═╡ 643043b9-ae20-4071-9367-b282f2654fd7
-# Tu código va aquí :)
+function tamañoDePaso(t0, tf, N) #Definimos la función
+    return (tf - t0) / N # Uyilizamos el método de Euler, sabemos que podemos utilizar la ecuación de h
+end
+
+
+# ╔═╡ e62a6340-84cb-40e8-89f2-d1b782ece274
+begin
+	t0 = 5
+	tf = 35
+	N = 30 #Asignamos un valor aleatoria a cada variable definida anteriormente
+	
+	Tamaño_paso = tamañoDePaso(t0, tf, N)
+	println("h: ", Tamaño_paso) #Imrpimimos la función
+	
+end
 
 # ╔═╡ c84d2b95-07a4-45f8-8e7e-e372acc89cb8
 md" **Ejercicio** Crea una función `arregloUniforme` que tome los mismos argumentos que `tamañoDePaso` **más** un argumento `h` para el tamaño de paso y devuelva un arreglo uniforme de números desde `t0` hasta `tf` con dicho tamaño de paso entre ellos. Esta función debe imprimir un mensaje de error si $N$ **no** es un entero positivo. "
 
 # ╔═╡ b0eb99e9-978a-4914-90a9-e05c73115e73
-# Tu código (comentado) va aquí :)
+
+function arregloUniforme(t0, tf, h) #Definimos la función  
+
+	arregloUniforme=[w*(h)+t0 for w∈0:15] #Establecemos un arreglo que utilice la función que satisface a las EDO y definimos que nuestra constante "w" debe tener un valor positivo.
+
+end 
+
+# ╔═╡ e36545be-3db1-43c2-a9af-3dea9a7af123
+arregloUniforme(5, 35, 9) #Imrprimimos la función que nos devuleve un arreglo de datos de t0 a tf.
 
 # ╔═╡ fa999314-0038-498a-ac9e-3ce04a9435a3
 md""" **Ejercicio** Crea una función `paso_euler` que tome argumentos `ti`, `xti`, `g` y `h`, donde
@@ -256,7 +278,28 @@ y devuelva una aproximación de $x(t_{i+1})$.
 """
 
 # ╔═╡ ecf4e2e8-821d-4e32-82d8-5eaec50363c3
-# Tu código (comentado) va aquí :)
+
+function paso_euler(ti, xti, g, h) #Definimos la función
+	    xti1 = xti + h * g(ti, xti) #Teniendo en cuenta la Teoria de Euler, la ecuación que usaremos es x(ti+1)
+	    return xti1 #Nos devolverá el resultado de la función que será una aproximación de x(ti+1).
+end #Fin de la función
+
+# ╔═╡ c5ba0e87-e782-4a38-8d99-f576a66cd674
+begin
+#Definimos  las variables considerando  que "g" ya esta definido en la Teoria de Euler.
+
+		function g(ti, xti) #Definimos el valor de "g" como en la ecuación (2).
+		return 5 * ti + xti #Tenemos en cuenta que ahora g = 5.
+		end
+		
+		ti = 3
+		xti = 9
+		h = 6
+		
+		xti1 = paso_euler(ti, xti, g, h)
+		println("Aproximación de la función x(ti+1): ", xti1) #Imprimimos la función.
+
+		end
 
 # ╔═╡ 1ec8d06d-160f-49de-a1aa-25c9d17cce64
 md""" **Ejercicio** Crea una función `euler` que tome argumentos `g`, `xt0` y `t`, donde
@@ -270,7 +313,25 @@ y devuelva un arreglo con `xt0` y los valores aproximados de $x(t_i)$ para $1\le
 """
 
 # ╔═╡ 7c8c2188-3173-4202-8ba4-83554831d940
-# Tu código (comentado) va aquí :)
+begin
+	
+	function euler(g, xt0, t) #Definimos la función 
+	    N = length(t) #Número de puntos en el arreglo del tiempo.
+	    xt = zeros(N) #Definimos un vector lleno de ceros que nos ayuda a almacenar las soluciones.
+	    
+	    xt[1] = xt0 #Agregamos una condición inicial que nos da la ecuación (1).
+
+		for t in 0:N #Definimos el parámetro de t que es 0 ≤ i ≤ N.
+		end
+			
+	    for i in 2:N #Definimos  i dentro del parámetro 1 ≤ i ≤ N.
+	        h = t[i] - t[i-7] #Definimos h
+	        xt[i] = xt[i-7] + h * g(t[i-7], xt[i-7]) #Usamos la ecuación del método de Euler tomando en cuenta el nuevo valor de h.
+		end 
+	    
+	    return xt #Pedimos que el código nos devuelva el resultado x(ti).
+	end
+end
 
 # ╔═╡ 1dc4a3c3-6b1c-4024-bfaf-ce72f5533209
 md"""
@@ -284,14 +345,48 @@ Verifica que tu implementación del método de Euler sea correcta aplicándola a
 """
 
 # ╔═╡ d821fc74-b60f-4571-bd82-44b4f7ece230
-#= Tu código (comentado) va aquí :)
-   También puedes agregar celdas para discutir tus resultados. =#
+	begin
+	function método_euler(g, xt0, t) #Definimos a la función
+	    return (3*t)*(2) #Creamos una función sencilla 
+	end
+
+	t = range(7, 4, 19) #Valor deseado para t.
+		
+	g(t) = ( 3 * t ) * (2)  #Definimos la condición inicial
+	xt0 = 18      # Condición inicial: x(0) = 18
+
+	e = método_euler(g, xt0, t) #Pedimos que se use el método de euler
+	println("Q: ", método_euler(g, xt0, t)) #Imprimimos la función
+	
+end
+
+# ╔═╡ 5f38810f-efdb-4648-ba12-578050fa5080
+begin
+	sol_Euler = euler(g, xt0, t) 
+	println("x(ti): ", sol_Euler) #Imprimimos la función 
+end
 
 # ╔═╡ c44f5b44-8899-444a-b5c4-f87e98102013
 md""" **Ejercicio** Utiliza tu implementación del método de Euler para solucionar el problema de condiciones iniciales $(1),(2)$. Grafica tu resultado junto con la gráfica de la solución analítica encontrada en el **Ejemplo** de la sección "Condiciones iniciales" y haz interactivo el parámetro $N$ para observar cómo cambia la aproximación que da tu solución numérica de la solución analítica en función del número de puntos utilizados en el intervalo $[t_0,t_f]$. """
 
 # ╔═╡ 80b45143-b908-4f89-bb6f-1cb500529ea9
-# Tu código (comentado) va aquí :)
+Deslizador = @bind n Slider(-1:0.1:10, default = 2) #Definimos el slider
+
+# ╔═╡ d6661ea0-1288-47c6-9498-83317ea620cf
+t1= 30 # Damos valor a t1
+
+# ╔═╡ a7f4feed-2f98-45ba-b4d9-5a184a8cc078
+begin
+	m = range(0, 10, length=100) #Fraficamos la función E con los rangos definidos.
+	Función = [n*(3*t)*2, C*((2.7182)(t))] #Definimos la función a utilizar.
+	
+end
+
+# ╔═╡ e7593823-c2f8-44c7-9136-b05325c73e28
+begin
+A = convert(Array, Función)
+plot(x, Función, linewidth = 5, xaxis="t", lw = 3, yaxis="Función") #Graficamos
+end
 
 # ╔═╡ e0081798-1e7e-47b3-a7d2-1d0f29d59990
 md""" ## Nota final
@@ -339,7 +434,7 @@ PlutoUI = "~0.7.39"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.8.4"
+julia_version = "1.8.5"
 manifest_format = "2.0"
 project_hash = "02e70b7d926cc3868981bc53aa675eecda1ec259"
 
@@ -1320,16 +1415,23 @@ version = "0.9.1+5"
 # ╟─858b97dd-c384-49cd-981a-e2a29ffbfb2a
 # ╟─8655c243-679b-46fb-b506-a0b035e902b7
 # ╠═643043b9-ae20-4071-9367-b282f2654fd7
+# ╠═e62a6340-84cb-40e8-89f2-d1b782ece274
 # ╟─c84d2b95-07a4-45f8-8e7e-e372acc89cb8
 # ╠═b0eb99e9-978a-4914-90a9-e05c73115e73
+# ╠═e36545be-3db1-43c2-a9af-3dea9a7af123
 # ╟─fa999314-0038-498a-ac9e-3ce04a9435a3
 # ╠═ecf4e2e8-821d-4e32-82d8-5eaec50363c3
+# ╠═c5ba0e87-e782-4a38-8d99-f576a66cd674
 # ╟─1ec8d06d-160f-49de-a1aa-25c9d17cce64
 # ╠═7c8c2188-3173-4202-8ba4-83554831d940
+# ╠═5f38810f-efdb-4648-ba12-578050fa5080
 # ╟─1dc4a3c3-6b1c-4024-bfaf-ce72f5533209
 # ╠═d821fc74-b60f-4571-bd82-44b4f7ece230
 # ╟─c44f5b44-8899-444a-b5c4-f87e98102013
 # ╠═80b45143-b908-4f89-bb6f-1cb500529ea9
+# ╠═d6661ea0-1288-47c6-9498-83317ea620cf
+# ╠═a7f4feed-2f98-45ba-b4d9-5a184a8cc078
+# ╠═e7593823-c2f8-44c7-9136-b05325c73e28
 # ╟─e0081798-1e7e-47b3-a7d2-1d0f29d59990
 # ╟─84f733e5-8e7a-4df7-880d-49ca09683257
 # ╟─fc7efcf9-70ca-4c3d-9822-720c67dcc7f7
